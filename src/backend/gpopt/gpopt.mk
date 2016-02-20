@@ -25,6 +25,8 @@
 
 UNAME = $(shell uname)
 UNAME_P = $(shell uname -p)
+UNAME_M = $(shell uname -m)
+
 ARCH_OS = GPOS_$(UNAME)
 ARCH_CPU = GPOS_$(UNAME_P)
 
@@ -41,8 +43,9 @@ ifeq "$(BLD_TYPE)" "opt"
 	GPOPT_flags = -O3 -fno-omit-frame-pointer -g3
 endif
 
-ARCH_BIT = GPOS_64BIT
-ifeq (Darwin, $(UNAME))
+ifeq (x86_64, $(UNAME_M))
+	ARCH_BIT = GPOS_64BIT
+else
 	ARCH_BIT = GPOS_32BIT
 endif
 
@@ -55,11 +58,6 @@ endif
 BLD_FLAGS = $(ARCH_FLAGS) -D$(ARCH_BIT) -D$(ARCH_CPU) -D$(ARCH_OS) $(GPOPT_flags)
 override CPPFLAGS := -fPIC $(CPPFLAGS)
 override CPPFLAGS := $(BLD_FLAGS)  $(CPPFLAGS)
-override CPPFLAGS := -DGPOS_VERSION=\"$(ORCA_DEPENDS_LIBGPOS_VER)\" $(CPPFLAGS)
-override CPPFLAGS := -DGPOPT_VERSION=\"$(ORCA_DEPENDS_OPTIMIZER_VER)\" $(CPPFLAGS)
-override CPPFLAGS := -DXERCES_VERSION=\"$(ORCA_DEPENDS_XERCES_VER)\" $(CPPFLAGS)
-override CPPFLAGS := -I $(ORCA_DEPENDS_DIR_INTER)/include $(CPPFLAGS)
-override CPPFLAGS := -I $(ORCA_DEPENDS_DIR_INTER)/libgpos/include $(CPPFLAGS)
-override CPPFLAGS := -I $(ORCA_DEPENDS_DIR_INTER)/libgpopt/include $(CPPFLAGS)
-override CPPFLAGS := -I $(ORCA_DEPENDS_DIR_INTER)/libnaucrates/include $(CPPFLAGS)
-override CPPFLAGS := -I $(ORCA_DEPENDS_DIR_INTER)/libgpdbcost/include $(CPPFLAGS)
+override CPPFLAGS := -DGPOS_VERSION=\"1.999\" $(CPPFLAGS)
+override CPPFLAGS := -DGPOPT_VERSION=\"1.999\" $(CPPFLAGS)
+override CPPFLAGS := -DXERCES_VERSION=\"3.1.2\" $(CPPFLAGS)
